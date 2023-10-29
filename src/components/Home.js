@@ -16,9 +16,15 @@ function Home() {
       const client = filestack.init("ASOcJeKFZS1m5rYyTVyFFz");
       client.upload(selectedFile).then(data => {
         const urlFile = data.url;
-        axios.post('http://localhost:8000/upload', { fileLink: urlFile })
+        console.log('Uploaded:', urlFile);
+        axios.post(
+          'http://localhost:8000/files/',
+          { 
+            url: urlFile
+          }
+          )
           .then(response => {
-            console.log('File link sent to the backend:', response.data);
+            console.log('Processed file link is:', response.data);
           })
           .catch(error => {
             console.error('Error sending file link to the backend:', error);
