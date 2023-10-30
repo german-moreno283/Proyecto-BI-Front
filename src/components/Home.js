@@ -7,10 +7,17 @@ function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [processedFileUrl, setProcessedFileUrl] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
+  };
+
+  const handleDownload = () => { // 3. Función para manejar la descarga
+    if (processedFileUrl) {
+      window.open(processedFileUrl.message, '_blank');
+    }
   };
 
   const handleUpload = () => {
@@ -27,6 +34,10 @@ function Home() {
               setSuccess(false);
             }, 3000);
             console.log('Processed file link is:', response.data);
+            setProcessedFileUrl(response.data); 
+            const enlaceHTML = `<a href="${response.data.url}">Enlace</a>`;
+            console.log('Link is:', processedFileUrl)
+            console.log('Enlace HTML:', enlaceHTML)
           })
           .catch(error => {
             setUploading(false);
@@ -47,6 +58,8 @@ function Home() {
       <hr />
       <button onClick={handleUpload}>{uploading ? 'Cargando...' : 'Upload'}</button>
       {success && <div className="success-popup">¡Carga exitosa!</div>}
+      <hr></hr>
+      {processedFileUrl && <button onClick={handleDownload}>Download Processed File</button>}
     </div>
   );
 }
